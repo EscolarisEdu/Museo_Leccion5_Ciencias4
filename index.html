@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabinete de Anatomía Comparada: Detectives de la Naturaleza</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cinzel (Títulos Clásicos), Playfair (Subtítulos), Quicksand (Lectura Limpia) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght=500;700;900&family=Playfair+Display:ital,wght=0,500;1,400&family=Quicksand:wght=400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome para iconografía clásica -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #0d0805;
+            background-image: 
+                radial-gradient(circle at 50% 30%, rgba(35, 23, 16, 0.98) 0%, rgba(12, 7, 5, 1) 85%),
+                url("https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1000&q=80"); /* Sutil textura de óleo clásico */
+            background-blend-mode: multiply;
+            background-size: cover;
+            background-attachment: fixed;
+            color: #fcf8f2;
+            overflow-x: hidden;
+        }
+
+        .museum-title {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.08em;
+        }
+
+        .museum-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Marcos y placas de latón envejecido y madera de caoba */
+        .brass-border {
+            border: 3px double #b8860b;
+            box-shadow: 
+                0 0 0 1px #5c4008,
+                inset 0 0 18px rgba(184, 134, 11, 0.3),
+                0 15px 30px -5px rgba(0,0,0,0.95);
+            background-image: linear-gradient(135deg, rgba(28, 18, 12, 0.97) 0%, rgba(15, 9, 6, 0.99) 100%);
+        }
+
+        /* Vitrinas clásicas de madera noble con reflejo de cristal */
+        .glass-cabinet {
+            background: linear-gradient(135deg, rgba(22, 14, 10, 0.95) 0%, rgba(10, 6, 4, 0.98) 100%);
+            border: 1px solid rgba(184, 134, 11, 0.25);
+            box-shadow: 
+                0 20px 40px -15px rgba(0, 0, 0, 0.95),
+                inset 0 1px 2px rgba(255, 255, 255, 0.06),
+                inset 0 -25px 50px rgba(0, 0, 0, 0.7);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-cabinet::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 50%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 100%);
+            transform: skewY(-4deg);
+            transform-origin: top left;
+            pointer-events: none;
+        }
+
+        /* Efecto de foco de luz interactivo de museo antiguo */
+        .spotlight-hover {
+            position: relative;
+        }
+        .spotlight-hover::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle 160px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(218, 165, 32, 0.15) 0%, transparent 100%);
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            opacity: 0;
+            z-index: 5;
+        }
+        .spotlight-hover:hover::after {
+            opacity: 1;
+        }
+
+        /* Estilo para los botones dorados de latón pulido */
+        .brass-btn {
+            background: linear-gradient(180deg, #d4af37 0%, #aa7c11 100%);
+            border: 2px solid #8b6508;
+            color: #120900;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+            box-shadow: 
+                0 6px 10px -2px rgba(0, 0, 0, 0.6),
+                inset 0 1px 1px rgba(255, 255, 255, 0.5);
+            font-weight: 700;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .brass-btn:hover {
+            background: linear-gradient(180deg, #e5c158 0%, #bd8e1c 100%);
+            box-shadow: 
+                0 0 20px rgba(212, 175, 55, 0.5),
+                inset 0 1px 1px rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+        .brass-btn:active {
+            transform: translateY(1px);
+            box-shadow: 
+                0 3px 4px rgba(0,0,0,0.7),
+                inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Botón de madera clásica de caoba */
+        .wood-btn {
+            background: linear-gradient(180deg, #4a2f1c 0%, #2e1b0f 100%);
+            border: 1px solid #1a0f08;
+            color: #eeddc5;
+            box-shadow: 
+                0 4px 6px -1px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+        .wood-btn:hover {
+            background: linear-gradient(180deg, #5c3b24 0%, #3b2314 100%);
+            color: #fff;
+            border-color: #aa7c11;
+        }
+
+        /* Partículas de polvo flotando en el museo */
+        .dust-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .dust-particle {
+            position: absolute;
+            background: rgba(212, 175, 55, 0.18);
+            border-radius: 50%;
+            animation: float-dust 25s infinite linear;
+        }
+
+        @keyframes float-dust {
+            0% {
+                transform: translateY(105vh) translateX(0) scale(1);
+                opacity: 0;
+            }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% {
+                transform: translateY(-5vh) translateX(60px) scale(0.6);
+                opacity: 0;
+            }
+        }
+
+        /* Péndulo de reloj clásico */
+        .pendulum {
+            animation: swing 2.2s infinite ease-in-out;
+            transform-origin: top center;
+        }
+        @keyframes swing {
+            0%, 100% { transform: rotate(-10deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        /* Rotación 3D para la medalla de premio */
+        .medal-spin {
+            animation: spin3D 8s infinite linear;
+            transform-style: preserve-3d;
+        }
+        @keyframes spin3D {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        /* Sutil efecto de respiración luminosa para proyectores */
+        .projector-glow {
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.1); }
+            50% { box-shadow: 0 0 35px rgba(212, 175, 55, 0.35); }
+        }
+
+        /* Estilos de barra de desplazamiento */
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: #0c0806; }
+        ::-webkit-scrollbar-thumb { 
+            background: #6e4d0d; 
+            border: 3px solid #0c0806;
+            border-radius: 6px; 
+        }
+        ::-webkit-scrollbar-thumb:hover { background: #b8860b; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen relative">
+
+    <!-- Contenedor para simular el polvo en suspensión del museo antiguo iluminado por la luz -->
+    <div class="dust-container" id="dust"></div>
+
+    <!-- AUDIO CONTROLLER FLOTANTE E INFORMACIÓN -->
+    <div class="fixed bottom-4 right-4 z-50 flex flex-col gap-2.5">
+        <!-- Control de Sonido de Ambiente -->
+        <button onclick="toggleAmbient()" id="ambient-btn" class="flex items-center gap-2.5 bg-stone-900/95 border-2 border-amber-600/30 hover:border-amber-500 p-3.5 rounded-full text-xs sm:text-sm shadow-2xl transition-all duration-300">
+            <i id="ambient-icon" class="fa-solid fa-music text-amber-500 animate-pulse"></i>
+            <span id="ambient-status" class="text-stone-300 font-bold">Música de Ambiente: Desactivada</span>
+        </button>
+        <!-- Control de Efectos de Sonido -->
+        <button onclick="toggleSFX()" id="sfx-btn" class="flex items-center gap-2.5 bg-stone-900/95 border-2 border-amber-600/30 hover:border-amber-500 p-3.5 rounded-full text-xs sm:text-sm shadow-2xl transition-all duration-300">
+            <i id="sfx-icon" class="fa-solid fa-volume-high text-emerald-400"></i>
+            <span id="sfx-status" class="text-stone-300 font-bold">Sonidos de Vitrina: Activos</span>
+        </button>
+    </div>
+
+    <!-- BARRA SUPERIOR DEL MUSEO -->
+    <header class="bg-stone-950/95 border-b-4 border-amber-800/50 sticky top-0 z-40 px-6 py-4 shadow-2xl">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="bg-gradient-to-tr from-amber-700 to-amber-950 p-3 rounded-xl shadow-xl ring-2 ring-amber-500/40">
+                    <i class="fa-solid fa-building-columns text-amber-100 text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-xl sm:text-2xl text-amber-100 uppercase tracking-wider museum-title">Gabinete de Anatomía</h1>
+                    <p class="text-xs sm:text-sm text-amber-500 font-bold tracking-widest flex items-center gap-2">
+                        <span class="inline-block w-2.5 h-2.5 bg-amber-500 rounded-full animate-ping"></span> INVESTIGANDO CON OWLARIS
+                    </p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <!-- Botón Especial para ulular (Canto de Owlaris) -->
+                <button onclick="playOwlHoot()" class="flex items-center gap-2.5 bg-stone-900/90 border-2 border-amber-600/30 hover:border-amber-500/70 px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all duration-300 group">
+                    <span class="group-hover:animate-bounce text-base">🦉</span>
+                    <span class="text-amber-200 font-bold">Llamar a Owlaris</span>
+                </button>
+
+                <!-- Cronómetro con estilo de péndulo clásico -->
+                <div class="flex items-center gap-3.5 bg-stone-900/95 px-5 py-2.5 rounded-xl border border-amber-600/30 shadow-inner">
+                    <i class="fa-solid fa-clock-rotate-left text-amber-500 text-lg pendulum"></i>
+                    <div class="text-xs sm:text-sm font-bold">
+                        <span class="text-stone-400 uppercase tracking-wider text-[11px] sm:text-xs">Tiempo:</span>
+                        <span class="text-amber-400 ml-1 font-mono text-base sm:text-lg" id="timer">10:00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-8 flex flex-col gap-8 z-10">
+        
+        <!-- BIENVENIDA AL VESTÍBULO DEL MUSEO -->
+        <section id="welcome-screen" class="glass-cabinet rounded-[2rem] p-8 md:p-12 shadow-2xl relative overflow-hidden brass-border">
+            <!-- Destello de luz cálida central -->
+            <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 flex flex-col lg:flex-row items-center gap-12">
+                <div class="w-full lg:w-3/5 space-y-6 text-center lg:text-left">
+                    <span class="bg-amber-950/60 text-amber-400 border border-amber-600/40 text-sm font-bold uppercase tracking-widest px-5 py-2 rounded-full inline-block shadow-lg">
+                        ⚜️ Entrada Principal • Gran Salón de Investigación
+                    </span>
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-amber-100 leading-tight museum-title">
+                        El misterio de las <br><span class="text-amber-500">fichas revueltas</span>
+                    </h2>
+                    <p class="text-stone-200 text-lg md:text-xl leading-relaxed museum-serif">
+                        Al entrar en la suave penumbra de la sala de investigación, descubres las vitrinas abiertas y los cajones de madera desordenados. El travieso gatito del museo ha tirado las valiosas muestras y ha mezclado los <strong class="text-amber-400">huesos de mamíferos</strong>, las <strong class="text-sky-400">plumas de aves</strong>, los <strong class="text-emerald-400">esqueletos de peces</strong> y las fabulosas armaduras de los <strong class="text-amber-500">insectos y arañas</strong>.
+                    </p>
+                    
+                    <!-- Cuadro informativo estilo pergamino -->
+                    <div class="p-6 bg-stone-900/90 border-l-4 border-amber-500/70 rounded-r-2xl flex gap-4 text-left shadow-2xl">
+                        <div class="flex-shrink-0 w-14 h-14 rounded-full bg-amber-900/30 border border-amber-500/40 flex items-center justify-center text-3xl select-none">
+                            🦉
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-amber-400 text-base">Tu guía, Owlaris el Búho Detective:</h4>
+                            <p class="text-stone-300 text-sm mt-1 leading-relaxed">"¡Hola, detective de la naturaleza! Soy Owlaris. He preparado este sistema interactivo con sonidos geniales para que descubras los secretos de los esqueletos y las armaduras de los animales. Explora las vitrinas con atención, escucha los sonidos y ayúdame a ordenar este laboratorio."</p>
+                        </div>
+                    </div>
+
+                    <button onclick="startMuseum()" class="w-full sm:w-auto px-12 py-5 brass-btn text-lg font-extrabold rounded-2xl shadow-xl transition-all duration-300 flex items-center justify-center gap-3 group">
+                        <span>ABRIR VITRINAS DEL GABINETE</span>
+                        <i class="fa-solid fa-key group-hover:rotate-45 transition-transform duration-300"></i>
+                    </button>
+                </div>
+
+                <!-- Imagen Principal interactiva de Owlaris con Mezcla Perfecta en Fondo Negro -->
+                <div class="w-full lg:w-2/5 flex justify-center">
+                    <div class="relative w-80 h-80 rounded-full border-4 border-amber-700/50 p-2 bg-stone-950/95 shadow-2xl flex items-center justify-center overflow-hidden group cursor-pointer" onclick="playOwlHoot()">
+                        <!-- Imagen de Owlaris limpia sin fondo mediante mix-blend-mode: screen -->
+                        <img src="tempImage1O3SMJ - Edited.jpg" 
+                             alt="Owlaris el Búho Detective" 
+                             class="w-full h-full object-contain p-2 transition-transform duration-500 group-hover:scale-105 relative z-10"
+                             style="mix-blend-mode: screen;"
+                             onerror="this.style.display='none'; document.getElementById('owl-fallback').classList.remove('hidden');">
+                        
+                        <!-- Fallback Vectorial Inteligente (Owlaris SVG) en caso de que la imagen local no cargue -->
+                        <div id="owl-fallback" class="hidden absolute inset-0 flex items-center justify-center p-6 bg-stone-900">
+                            <svg viewBox="0 0 100 100" class="w-48 h-48 drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]">
+                                <ellipse cx="50" cy="55" rx="35" ry="38" fill="#8B4513" />
+                                <ellipse cx="50" cy="55" rx="27" ry="30" fill="#CD853F" />
+                                <path d="M50,75 C40,75 35,60 35,55 C35,50 40,48 50,48 C60,48 65,50 65,55 C65,60 60,75 50,75 Z" fill="#F4A460" opacity="0.8"/>
+                                <polygon points="20,25 35,30 25,45" fill="#5C2E0B" />
+                                <polygon points="80,25 65,30 75,45" fill="#5C2E0B" />
+                                <circle cx="35" cy="40" r="14" fill="#FFE4B5" />
+                                <circle cx="35" cy="40" r="10" fill="#FFFFFF" />
+                                <circle cx="34" cy="40" r="7" fill="#1A0F00" />
+                                <circle cx="31" cy="37" r="2.5" fill="#FFFFFF" />
+                                <circle cx="65" cy="40" r="14" fill="#FFE4B5" />
+                                <circle cx="65" cy="40" r="10" fill="#FFFFFF" />
+                                <circle cx="66" cy="40" r="7" fill="#1A0F00" />
+                                <circle cx="69" cy="37" r="2.5" fill="#FFFFFF" />
+                                <circle cx="35" cy="40" r="14" fill="none" stroke="#D4AF37" stroke-width="2.5" />
+                                <line x1="23" y1="50" x2="14" y2="59" stroke="#D4AF37" stroke-width="3" />
+                                <polygon points="50,42 46,52 54,52" fill="#FF8C00" />
+                                <ellipse cx="50" cy="22" rx="26" ry="4" fill="#8B7D6B" />
+                                <path d="M32,22 C32,8 68,8 68,22 Z" fill="#A0522D" />
+                                <rect x="34" y="16" width="32" height="4" fill="#5C2E0B" />
+                            </svg>
+                        </div>
+                        
+                        <!-- Anillo de latón decorativo que rota -->
+                        <div class="absolute inset-0 border-2 border-dashed border-amber-500/30 rounded-full animate-[spin_80s_linear_infinite]"></div>
+                        
+                        <!-- Etiqueta de llamada -->
+                        <div class="absolute bottom-4 bg-amber-950/90 border border-amber-500/40 px-4 py-1.5 rounded-full text-xs text-amber-200 uppercase font-bold tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg z-20">
+                            Hacer Clic para Oír 🦉
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AREA DE SALAS DEL MUSEO (EXPOSICIÓN INTERACTIVE) -->
+        <section id="museum-area" class="hidden flex flex-col gap-8 transition-all duration-300">
+            
+            <!-- SELECTOR DE SALAS / ALA DE EXPOSICIÓN (ESTILO PLACAS DE COBRE Y CAOBA) -->
+            <nav class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-stone-950/95 p-3.5 rounded-2xl border-2 border-amber-800/40 shadow-2xl">
+                <button onclick="switchTab('exhibitions')" id="tab-exhibitions" class="py-4 px-5 rounded-xl text-sm sm:text-base font-extrabold transition-all duration-300 bg-amber-500 text-stone-950 shadow-md flex items-center justify-center gap-2.5">
+                    <i class="fa-solid fa-university text-base"></i> <span>1. Galerías</span>
+                </button>
+                <button onclick="switchTab('comparer')" id="tab-comparer" class="py-4 px-5 rounded-xl text-sm sm:text-base font-extrabold transition-all duration-300 text-stone-400 hover:bg-stone-900/60 flex items-center justify-center gap-2.5">
+                    <i class="fa-solid fa-scale-balanced text-base"></i> <span>2. Comparador</span>
+                </button>
+                <button onclick="switchTab('lab')" id="tab-lab" class="py-4 px-5 rounded-xl text-sm sm:text-base font-extrabold transition-all duration-300 text-stone-400 hover:bg-stone-900/60 flex items-center justify-center gap-2.5">
+                    <i class="fa-solid fa-vial text-base"></i> <span>3. Taller/Lab</span>
+                </button>
+                <button onclick="switchTab('badge-room')" id="tab-badge-room" class="py-4 px-5 rounded-xl text-sm sm:text-base font-extrabold transition-all duration-300 text-stone-400 hover:bg-stone-900/60 flex items-center justify-center gap-2.5">
+                    <i class="fa-solid fa-award text-base"></i> <span>4. Medallero</span>
+                </button>
+            </nav>
+
+            <!-- CONTENIDO 1: GALERÍAS DE ESPECÍMENES -->
+            <div id="content-exhibitions" class="space-y-8 animate-[fadeIn_0.5s_ease-out]">
+                <div class="text-center space-y-3">
+                    <h3 class="text-3xl sm:text-4xl font-extrabold text-amber-100 museum-title">Gabinete de Zoología Histórica</h3>
+                    <p class="text-stone-300 text-base sm:text-lg max-w-2xl mx-auto museum-serif">Elige uno de los expositores de madera noble para encender la luz y ver de cerca cómo están formados sus cuerpos.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Mamíferos -->
+                    <div id="cabinet-mamiferos" class="glass-cabinet spotlight-hover p-6 rounded-3xl hover:border-amber-500/50 transition-all duration-300 flex flex-col justify-between group cursor-pointer" onclick="clickExhibit('mamiferos')">
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-start mb-5">
+                                <div class="w-14 h-14 rounded-2xl bg-amber-500/10 flex items-center justify-center text-4xl select-none">🦁</div>
+                                <div class="flex flex-col items-end gap-1">
+                                    <span class="text-xs font-bold text-amber-400 uppercase tracking-widest bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">Esqueleto interno</span>
+                                    <span id="badge-mamiferos" class="hidden text-[10px] font-bold text-amber-400 bg-stone-950 px-2.5 py-1 rounded border border-amber-500/40 animate-pulse">🔴 FOCO ACTIVO</span>
+                                </div>
+                            </div>
+                            <h4 class="text-2xl font-bold text-amber-100 mb-3 museum-title flex items-center gap-2">
+                                Mamíferos 
+                                <span class="text-sm text-amber-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                </span>
+                            </h4>
+                            <p class="text-stone-300 text-sm sm:text-base leading-relaxed mb-5">Tienen un esqueleto de hueso por dentro de su cuerpo (llamado <strong>endoesqueleto</strong>) con una columna vertebral en la espalda. Su piel está cubierta de <strong>pelo</strong> suave y las madres alimentan a sus crías con leche.</p>
+                            
+                            <!-- ILUSTRACIÓN DE COLUMNA VERTEBRAL REAL (MAMÍFEROS) -->
+                            <div class="h-32 bg-stone-950/80 rounded-xl mb-4 border border-amber-900/20 flex items-center justify-center relative overflow-hidden group-hover:bg-stone-900/60 transition-colors">
+                                <svg class="w-36 h-20 text-amber-500/30 group-hover:text-amber-500/70 transition-all duration-300" viewBox="0 0 100 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M10,20 L90,20" stroke-dasharray="3,3" stroke-width="1" />
+                                    <rect x="15" y="14" width="8" height="12" rx="2" fill="currentColor" fill-opacity="0.1" />
+                                    <rect x="26" y="14" width="8" height="12" rx="2" fill="currentColor" fill-opacity="0.1" />
+                                    <rect x="37" y="13" width="9" height="14" rx="2" fill="currentColor" fill-opacity="0.1" />
+                                    <rect x="49" y="12" width="10" height="16" rx="2" fill="currentColor" fill-opacity="0.1" />
+                                    <rect x="62" y="13" width="9" height="14" rx="2" fill="currentColor" fill-opacity="0.1" />
+                                    <rect x="74" y="14" width="8" height="12" rx="2" fill="currentColor" fill-opacity="0.1" />
+                                    <path d="M19,14 L19,10 M30,14 L30,10 M41,13 L41,8 M54,12 L54,6 M66,13 L66,8 M78,14 L78,10" stroke-width="1.5"/>
+                                    <path d="M19,26 L19,30 M30,26 L30,30 M41,27 L41,32 M54,28 L54,34 M66,27 L66,32 M78,26 L78,30" stroke-width="1.5"/>
+                                    <path d="M23,20 L26,20 M34,20 L37,20 M46,20 L49,20 M59,20 L62,20 M71,20 L74,20" stroke-width="3" stroke-linecap="square" />
+                                </svg>
+                                <span class="absolute bottom-2 right-3 text-[10px] uppercase tracking-wider text-stone-500 font-bold group-hover:text-amber-500/80 transition-colors">Columna Vertebral</span>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-amber-500/10 text-xs sm:text-sm text-stone-400 flex justify-between relative z-10">
+                            <span>🦴 Soporte por dentro</span> <span class="text-amber-500 font-bold uppercase">Endoesqueleto</span>
+                        </div>
+                    </div>
+
+                    <!-- Aves -->
+                    <div id="cabinet-aves" class="glass-cabinet spotlight-hover p-6 rounded-3xl hover:border-sky-500/50 transition-all duration-300 flex flex-col justify-between group cursor-pointer" onclick="clickExhibit('aves')">
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-start mb-5">
+                                <div class="w-14 h-14 rounded-2xl bg-sky-500/10 flex items-center justify-center text-4xl select-none">🦅</div>
+                                <div class="flex flex-col items-end gap-1">
+                                    <span class="text-xs font-bold text-sky-400 uppercase tracking-widest bg-sky-500/10 px-3 py-1 rounded-full border border-sky-500/20">Huesos huecos</span>
+                                    <span id="badge-aves" class="hidden text-[10px] font-bold text-sky-400 bg-stone-950 px-2.5 py-1 rounded border border-sky-500/40 animate-pulse">🔴 FOCO ACTIVO</span>
+                                </div>
+                            </div>
+                            <h4 class="text-2xl font-bold text-amber-100 mb-3 museum-title flex items-center gap-2">
+                                Aves 
+                                <span class="text-sm text-sky-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                </span>
+                            </h4>
+                            <p class="text-stone-300 text-sm sm:text-base leading-relaxed mb-5">Tienen un esqueleto muy ligero con huesos <strong>huecos (se llaman neumáticos)</strong>, que son como pajillas llenas de aire para poder volar sin pesar tanto. Su cuerpo está cubierto de hermosas plumas.</p>
+                            
+                            <!-- ILUSTRACIÓN DE PLUMA DETALLADA (AVES) -->
+                            <div class="h-32 bg-stone-950/80 rounded-xl mb-4 border border-sky-900/20 flex items-center justify-center relative overflow-hidden group-hover:bg-stone-900/60 transition-colors">
+                                <svg class="w-28 h-24 text-sky-500/30 group-hover:text-sky-500/70 transition-all duration-300" viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-linecap="round">
+                                    <path d="M15,50 C30,40 50,25 65,10" stroke-width="2.5" />
+                                    <path d="M25,43 C33,31 43,23 52,19" stroke-width="1.2" />
+                                    <path d="M30,39 C39,27 49,19 58,15" stroke-width="1.2" />
+                                    <path d="M35,35 C45,23 55,16 63,12" stroke-width="1.2" />
+                                    <path d="M42,30 C51,19 60,13 65,11" stroke-width="1" />
+                                    <path d="M19,47 C28,45 38,42 45,39" stroke-width="1.2" />
+                                    <path d="M23,44 C33,41 44,37 51,33" stroke-width="1.2" />
+                                    <path d="M28,40 C40,36 50,31 57,26" stroke-width="1.2" />
+                                    <path d="M34,35 C46,30 55,25 61,19" stroke-width="1.2" />
+                                    <path d="M41,31 C51,26 59,20 64,14" stroke-width="1" />
+                                </svg>
+                                <span class="absolute bottom-2 right-3 text-[10px] uppercase tracking-wider text-stone-500 font-bold group-hover:text-sky-500/80 transition-colors">Pluma de Vuelo</span>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-sky-500/10 text-xs sm:text-sm text-stone-400 flex justify-between relative z-10">
+                            <span>🪶 Plumas Ligeras</span> <span class="text-sky-400 font-bold uppercase">Huesos Neumáticos</span>
+                        </div>
+                    </div>
+
+                    <!-- Peces -->
+                    <div id="cabinet-peces" class="glass-cabinet spotlight-hover p-6 rounded-3xl hover:border-teal-500/50 transition-all duration-300 flex flex-col justify-between group cursor-pointer" onclick="clickExhibit('peces')">
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-start mb-5">
+                                <div class="w-14 h-14 rounded-2xl bg-teal-500/10 flex items-center justify-center text-4xl select-none">🐟</div>
+                                <div class="flex flex-col items-end gap-1">
+                                    <span class="text-xs font-bold text-teal-400 uppercase tracking-widest bg-teal-500/10 px-3 py-1 rounded-full border border-teal-500/20">Esqueleto flexible</span>
+                                    <span id="badge-peces" class="hidden text-[10px] font-bold text-emerald-400 bg-stone-950 px-2.5 py-1 rounded border border-emerald-500/40 animate-pulse">🔴 FOCO ACTIVO</span>
+                                </div>
+                            </div>
+                            <h4 class="text-2xl font-bold text-amber-100 mb-3 museum-title flex items-center gap-2">
+                                Peces 
+                                <span class="text-sm text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                </span>
+                            </h4>
+                            <p class="text-stone-300 text-sm sm:text-base leading-relaxed mb-5">Tienen el cuerpo cubierto de escamas brillantes que los protegen. Usan <strong>branquias</strong> a los lados de su cabeza para respirar bajo el agua y sus huesos son flexibles para nadar con rapidez.</p>
+                            
+                            <!-- ILUSTRACIÓN DE ESQUELETO SÓLIDO DE PEZ -->
+                            <div class="h-32 bg-stone-950/80 rounded-xl mb-4 border border-teal-900/20 flex items-center justify-center relative overflow-hidden group-hover:bg-stone-900/60 transition-colors">
+                                <svg class="w-32 h-20 text-teal-500/30 group-hover:text-teal-500/70 transition-all duration-300" viewBox="0 0 100 40" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M80,20 C75,12 68,14 65,20 C68,26 75,28 80,20 Z" stroke-width="2" fill="currentColor" fill-opacity="0.1" />
+                                    <circle cx="73" cy="18" r="1.5" fill="currentColor" />
+                                    <path d="M65,20 L20,20" stroke-width="2" />
+                                    <path d="M60,20 L64,10" stroke-width="1.2" />
+                                    <path d="M54,20 L57,8" stroke-width="1.2" />
+                                    <path d="M48,20 L50,8" stroke-width="1.2" />
+                                    <path d="M42,20 L43,9" stroke-width="1.2" />
+                                    <path d="M36,20 L37,10" stroke-width="1.2" />
+                                    <path d="M30,20 L31,12" stroke-width="1" />
+                                    <path d="M24,20 L25,14" stroke-width="1" />
+                                    <path d="M60,20 L64,30" stroke-width="1.2" />
+                                    <path d="M54,20 L57,32" stroke-width="1.2" />
+                                    <path d="M48,20 L50,32" stroke-width="1.2" />
+                                    <path d="M42,20 L43,31" stroke-width="1.2" />
+                                    <path d="M36,20 L37,30" stroke-width="1.2" />
+                                    <path d="M30,20 L31,28" stroke-width="1" />
+                                    <path d="M24,20 L25,26" stroke-width="1" />
+                                    <path d="M20,20 L10,10 L14,20 L10,30 L20,20" stroke-width="1.5" fill="currentColor" fill-opacity="0.1" />
+                                </svg>
+                                <span class="absolute bottom-2 right-3 text-[10px] uppercase tracking-wider text-stone-500 font-bold group-hover:text-teal-500/80 transition-colors">Esqueleto Pisciforme</span>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-teal-500/10 text-xs sm:text-sm text-stone-400 flex justify-between relative z-10">
+                            <span>🌊 Respiración Branquial</span> <span class="text-teal-400 font-bold uppercase">Acuático</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GABINETE EXTRA: INVESTIGACIÓN DE EXOESQUELETOS -->
+                <div class="bg-gradient-to-br from-amber-950/50 to-stone-950/90 border-2 border-amber-500/35 rounded-[2rem] p-8 relative overflow-hidden shadow-2xl brass-border">
+                    <div class="absolute right-0 top-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="flex flex-col lg:flex-row gap-8 items-center relative z-10">
+                        <div class="lg:w-2/3 space-y-4">
+                            <span class="bg-amber-950/80 text-amber-400 border border-amber-500/40 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full inline-block shadow-lg">
+                                🔬 Armaduras de la Naturaleza • Invertebrados
+                            </span>
+                            <h4 class="text-3xl font-extrabold text-amber-100 museum-title">Exoesqueletos: La Armadura Exterior</h4>
+                            <p class="text-stone-300 text-base sm:text-lg leading-relaxed museum-serif">
+                                A diferencia de nosotros, algunos animales no tienen huesos por dentro. ¡Llevan su esqueleto por fuera como una armadura brillante! Este soporte externo (<strong>exoesqueleto</strong>) está hecho de un material duro llamado <strong>quitina</strong>. Como esta armadura no se estira, los animales deben cambiarla por una nueva más grande para poder crecer (a esto se le llama mudar la piel).
+                            </p>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-3">
+                                <div class="bg-stone-950/90 p-6 rounded-2xl border border-amber-600/20 hover:border-amber-500/40 transition-all duration-300 shadow-xl">
+                                    <h5 class="font-bold text-amber-400 text-lg mb-2 flex items-center gap-2">
+                                        <span>🐜</span> Insectos
+                                    </h5>
+                                    <p class="text-xs sm:text-sm text-stone-300 leading-relaxed">Su cuerpo se divide en <strong>3 partes principales</strong> (cabeza, tórax y abdomen). Tienen <strong>6 patas articuladas</strong> (que se pueden doblar) y dos antenas en su cabecita para sentir lo que les rodea.</p>
+                                </div>
+                                <div class="bg-stone-950/90 p-6 rounded-2xl border border-amber-600/20 hover:border-amber-500/40 transition-all duration-300 shadow-xl">
+                                    <h5 class="font-bold text-amber-500 text-lg mb-2 flex items-center gap-2">
+                                        <span>🕷️</span> Arácnidos
+                                    </h5>
+                                    <p class="text-xs sm:text-sm text-stone-300 leading-relaxed">Su cuerpo se divide en solo <strong>2 partes</strong> (cabeza y pecho unidos, y abdomen). Tienen <strong>8 patas para caminar</strong> muy rápido y no tienen antenas en absoluto.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lg:w-1/3 text-center flex flex-col items-center justify-center">
+                            <div class="text-9xl block mb-6 select-none filter drop-shadow-2xl animate-pulse" style="animation-duration: 3s;">🐜</div>
+                            <button onclick="switchTab('lab')" class="text-sm font-extrabold text-amber-300 hover:text-white transition-colors bg-amber-950/60 hover:bg-amber-900/60 px-6 py-4 rounded-xl border-2 border-amber-500/30 flex items-center gap-2.5 shadow-lg">
+                                Ir al Laboratorio de Clasificación <i class="fa-solid fa-vial"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTENIDO 2: COMPARADOR ANATÓMICO (CONSOLA HISTÓRICA) -->
+            <div id="content-comparer" class="hidden space-y-8 animate-[fadeIn_0.5s_ease-out]">
+                <div class="text-center space-y-3">
+                    <h3 class="text-3xl sm:text-4xl font-extrabold text-amber-100 museum-title">Consola de Comparación</h3>
+                    <p class="text-stone-300 text-base sm:text-lg museum-serif">Compara dos animales frente a frente para descubrir en qué se parecen y en qué son diferentes.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto bg-stone-950/95 p-6 rounded-3xl border-2 border-amber-800/40 shadow-2xl">
+                    <div class="space-y-2 text-center">
+                        <label class="text-xs font-bold text-amber-400 uppercase tracking-widest block">Primer Animal</label>
+                        <select id="select-a" onchange="updateComparison()" class="w-full bg-stone-900 border-2 border-amber-700/30 rounded-2xl px-5 py-4 text-amber-100 font-extrabold outline-none focus:border-amber-500 cursor-pointer text-sm sm:text-base">
+                            <option value="mamiferos">🦁 Mamíferos</option>
+                            <option value="aves" selected>🦅 Aves</option>
+                            <option value="peces">🐟 Peces</option>
+                            <option value="insectos">🐜 Insectos</option>
+                            <option value="aranas">🕷️ Arañas</option>
+                        </select>
+                    </div>
+                    <div class="space-y-2 text-center">
+                        <label class="text-xs font-bold text-amber-500 uppercase tracking-widest block">Segundo Animal</label>
+                        <select id="select-b" onchange="updateComparison()" class="w-full bg-stone-900 border-2 border-amber-700/30 rounded-2xl px-5 py-4 text-amber-100 font-extrabold outline-none focus:border-amber-500 cursor-pointer text-sm sm:text-base">
+                            <option value="mamiferos">🦁 Mamíferos</option>
+                            <option value="aves">🦅 Aves</option>
+                            <option value="peces">🐟 Peces</option>
+                            <option value="insectos" selected>🐜 Insectos</option>
+                            <option value="aranas">🕷️ Arañas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Fichas técnicas comparativas -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                    <div id="card-a" class="glass-cabinet p-8 rounded-[2rem] border-amber-500/25 shadow-2xl relative">
+                        <!-- Carga dinámica mediante JavaScript -->
+                    </div>
+                    <div id="card-b" class="glass-cabinet p-8 rounded-[2rem] border-amber-500/25 shadow-2xl relative">
+                        <!-- Carga dinámica mediante JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Conclusión del Gabinete -->
+                <div class="bg-amber-950/35 border-2 border-amber-500/30 p-6 rounded-2xl max-w-3xl mx-auto flex items-center gap-5 shadow-inner">
+                    <div class="text-4xl select-none">🦉</div>
+                    <div class="text-xs sm:text-sm text-stone-200">
+                        <span class="text-xs font-bold text-amber-500 uppercase tracking-widest block mb-1">Informe del Búho Owlaris</span>
+                        <p id="conclusion-text" class="leading-relaxed museum-serif text-sm sm:text-base"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTENIDO 3: LABORATORIO DE CLASIFICACIÓN (MESA DE TRABAJO) -->
+            <div id="content-lab" class="hidden space-y-6 animate-[fadeIn_0.5s_ease-out]">
+                <div class="text-center space-y-3">
+                    <h3 class="text-3xl sm:text-4xl font-extrabold text-amber-100 museum-title">Mesa de Clasificación</h3>
+                    <p class="text-stone-300 text-base sm:text-lg max-w-xl mx-auto museum-serif">Selecciona una pista de la bandeja de muestras y arrástrala o asígnala a la vitrina de cristal correcta.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Bandeja de muestras físicas -->
+                    <div class="glass-cabinet p-6 rounded-3xl flex flex-col border-amber-500/25">
+                        <div class="flex items-center justify-between mb-4 border-b-2 border-amber-800/30 pb-3">
+                            <h4 class="font-extrabold text-amber-100 uppercase text-xs tracking-wider">🔬 Bandeja de Muestras</h4>
+                            <span class="text-xs bg-amber-500/10 text-amber-500 font-extrabold px-3 py-1 rounded-md">6 Pistas</span>
+                        </div>
+                        <div id="clues-list" class="space-y-3.5 flex-grow min-h-[300px]">
+                            <!-- Carga dinámica mediante JavaScript -->
+                        </div>
+                        <button onclick="resetLab()" class="mt-4 py-3 wood-btn text-xs sm:text-sm font-extrabold uppercase rounded-lg transition-all shadow-md">
+                            <i class="fa-solid fa-rotate-left mr-1.5"></i> Reiniciar Bandeja
+                        </button>
+                    </div>
+
+                    <!-- Vitrina de Clasificación: Insectos -->
+                    <div class="bg-emerald-950/20 border-2 border-emerald-500/25 rounded-3xl p-6 shadow-2xl flex flex-col justify-between relative overflow-hidden group">
+                        <div class="absolute -top-12 -right-12 w-24 h-24 bg-emerald-500/5 rounded-full blur-xl"></div>
+                        <div class="relative z-10">
+                            <div class="text-center mb-6 border-b border-emerald-500/10 pb-4">
+                                <span class="text-6xl block mb-2 filter drop-shadow-md select-none">🐜</span>
+                                <h5 class="font-extrabold text-emerald-400 uppercase tracking-widest text-base">Vitrina de Insectos</h5>
+                                <p class="text-xs text-emerald-500/80 font-bold tracking-wider mt-1.5">Cuerpo en 3 partes • 6 patas • Tienen antenas</p>
+                            </div>
+                            <div id="target-insect" class="space-y-3 min-h-[180px] border border-emerald-500/10 rounded-2xl p-4 bg-stone-950/75 shadow-inner flex flex-col gap-2">
+                                <!-- Colocadas -->
+                            </div>
+                        </div>
+                        <button onclick="moveTo('insect')" class="w-full mt-5 py-3.5 bg-emerald-700 hover:bg-emerald-600 text-stone-950 font-extrabold rounded-xl text-sm uppercase tracking-wider transition-all duration-300 shadow-lg shadow-emerald-500/15 border border-emerald-500/30">
+                            <i class="fa-solid fa-arrow-down mr-1.5"></i> Clasificar como Insecto
+                        </button>
+                    </div>
+
+                    <!-- Vitrina de Clasificación: Arañas -->
+                    <div class="bg-amber-950/20 border-2 border-amber-500/25 rounded-3xl p-6 shadow-2xl flex flex-col justify-between relative overflow-hidden group">
+                        <div class="absolute -top-12 -right-12 w-24 h-24 bg-amber-500/5 rounded-full blur-xl"></div>
+                        <div class="relative z-10">
+                            <div class="text-center mb-6 border-b border-amber-500/10 pb-4">
+                                <span class="text-6xl block mb-2 filter drop-shadow-md select-none">🕷️</span>
+                                <h5 class="font-extrabold text-amber-400 uppercase tracking-widest text-base">Vitrina de Arácnidos</h5>
+                                <p class="text-xs text-amber-500/80 font-bold tracking-wider mt-1.5">Cuerpo en 2 partes • 8 patas • No tienen antenas</p>
+                            </div>
+                            <div id="target-spider" class="space-y-3 min-h-[180px] border border-amber-500/10 rounded-2xl p-4 bg-stone-950/75 shadow-inner flex flex-col gap-2">
+                                <!-- Colocadas -->
+                            </div>
+                        </div>
+                        <button onclick="moveTo('spider')" class="w-full mt-5 py-3.5 bg-amber-700 hover:bg-amber-600 text-stone-950 font-extrabold rounded-xl text-sm uppercase tracking-wider transition-all duration-300 shadow-lg shadow-amber-500/15 border border-amber-500/30">
+                            <i class="fa-solid fa-arrow-down mr-1.5"></i> Clasificar como Arácnido
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Alerta de Éxito del Laboratorio -->
+                <div id="success-alert" class="hidden glass-cabinet p-8 rounded-3xl border-2 border-emerald-500/40 text-center max-w-xl mx-auto shadow-2xl ring-1 ring-emerald-500/25 animate-bounce">
+                    <span class="text-5xl block mb-3">🏆</span>
+                    <h5 class="text-2xl font-extrabold text-white mb-2 museum-title">¡Mesa Ordenada!</h5>
+                    <p class="text-stone-300 text-base mb-5 museum-serif">Has organizado todos los especímenes morfológicos con total rigurosidad científica. Tu análisis de tagmas y apéndices ha sido perfecto.</p>
+                    <button onclick="switchTab('badge-room')" class="brass-btn px-8 py-4 rounded-xl font-extrabold uppercase text-xs sm:text-sm tracking-wider transition-all duration-300">
+                        Ver Reconocimientos de la Academia <i class="fa-solid fa-arrow-right ml-1.5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- CONTENIDO 4: SALA DE RECONOCIMIENTO (RECOMPENSAS) -->
+            <div id="content-badge-room" class="hidden text-center space-y-8 py-4 animate-[fadeIn_0.5s_ease-out]">
+                <div class="glass-cabinet p-10 md:p-14 rounded-[2.5rem] max-w-2xl mx-auto shadow-2xl relative border-2 border-amber-500/35 overflow-hidden brass-border">
+                    <div class="absolute inset-0 bg-amber-500/[0.02] pointer-events-none"></div>
+                    <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-80 h-80 bg-amber-500/15 rounded-full blur-3xl"></div>
+
+                    <!-- Cerrado temporalmente (Sin resolver) -->
+                    <div id="badge-lock" class="w-36 h-36 bg-stone-950/95 rounded-full border-4 border-dashed border-stone-700 flex items-center justify-center mx-auto transition-all duration-300">
+                        <i class="fa-solid fa-lock text-5xl text-stone-600"></i>
+                    </div>
+
+                    <!-- Medalla Simbólica Abierta 3D (Se muestra al resolver el lab) -->
+                    <div id="badge-unlocked" class="hidden relative w-48 h-48 mx-auto flex items-center justify-center">
+                        <!-- Brillo radiante detrás -->
+                        <div class="absolute inset-0 bg-amber-500/20 rounded-full blur-2xl animate-pulse"></div>
+                        <div class="medal-spin relative z-10 w-40 h-40">
+                            <!-- SVG de la Gran Medalla de Oro del Museo -->
+                            <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.85)]">
+                                <!-- Cinta de la Medalla -->
+                                <path d="M35,0 L42,35 L58,35 L65,0 Z" fill="#991B1B" stroke="#851414" stroke-width="1"/>
+                                <path d="M45,0 L47,35 L53,35 L55,0 Z" fill="#FBBF24" />
+                                <!-- Cuerpo circular exterior de latón -->
+                                <circle cx="50" cy="62" r="32" fill="url(#brassGradient)" stroke="#78350F" stroke-width="2"/>
+                                <circle cx="50" cy="62" r="28" fill="url(#goldGradient)" stroke="#D97706" stroke-width="1.5" stroke-dasharray="3,1.5"/>
+                                <!-- Estrella interna de la Real Academia -->
+                                <polygon points="50,42 54,53 66,53 56,60 60,72 50,64 40,72 44,60 34,53 46,53" fill="#D97706" />
+                                <polygon points="50,45 53,54 63,54 55,60 58,70 50,63 42,70 45,60 37,54 47,54" fill="#FCD34D" />
+                                <!-- Símbolo de búho grabado en el centro -->
+                                <ellipse cx="50" cy="59" rx="4" ry="5" fill="#78350F" opacity="0.3"/>
+                                <circle cx="48.5" cy="58" r="1" fill="#FFF"/>
+                                <circle cx="51.5" cy="58" r="1" fill="#FFF"/>
+                                <polygon points="50,59 48,61 52,61" fill="#78350F" />
+                                
+                                <!-- Definición de gradientes metálicos -->
+                                <defs>
+                                    <linearGradient id="brassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#aa7c11" />
+                                        <stop offset="50%" stop-color="#f59e0b" />
+                                        <stop offset="100%" stop-color="#5c4008" />
+                                    </linearGradient>
+                                    <linearGradient id="goldGradient" x1="100%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" stop-color="#FFF" stop-opacity="0.6"/>
+                                        <stop offset="30%" stop-color="#FCD34D" />
+                                        <stop offset="100%" stop-color="#B45309" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 space-y-5">
+                        <h3 id="badge-name" class="text-3xl sm:text-4xl font-extrabold text-amber-100 museum-title">Investigador Novel</h3>
+                        <p id="badge-msg" class="text-stone-300 text-base sm:text-lg max-w-md mx-auto museum-serif">
+                            Ordena todas las muestras de la mesa de trabajo para ganar tu medalla de la academia de ciencias.
+                        </p>
+                        
+                        <!-- Progreso -->
+                        <div class="max-w-md mx-auto space-y-3">
+                            <div class="w-full bg-stone-950/95 rounded-full h-4 overflow-hidden p-0.5 border border-amber-500/30">
+                                <div id="progress-bar" class="bg-gradient-to-r from-amber-600 to-amber-400 h-full w-0 rounded-full transition-all duration-355"></div>
+                            </div>
+                            <p id="progress-txt" class="text-xs sm:text-sm text-stone-400 font-bold uppercase tracking-widest">PROGRESO: 0 / 6 pistas clasificadas</p>
+                        </div>
+                    </div>
+
+                    <!-- Sección de Felicitación Definitiva -->
+                    <div id="congrats-panel" class="hidden mt-8 pt-8 border-t-2 border-amber-800/40 text-center space-y-6">
+                        <div class="p-6 bg-amber-950/20 border-2 border-amber-500/25 rounded-2xl max-w-lg mx-auto">
+                            <span class="text-4xl block mb-2">🦉📜</span>
+                            <h4 class="text-2xl font-bold text-amber-300 font-serif">¡Gran Trabajo de Investigación!</h4>
+                            <p class="text-stone-200 text-sm sm:text-base leading-relaxed mt-3 museum-serif">
+                                "¡Felicidades, colega detective! Has ordenado todas las muestras del laboratorio a la perfección. Gracias a tu gran observación de las patas, las antenas y el cuerpo de cada animal, el museo vuelve a estar ordenado y listo para abrir sus puertas."
+                            </p>
+                            <div class="flex justify-center items-center gap-4 mt-5 pt-4 border-t border-amber-800/20 text-xs text-amber-500 font-serif uppercase tracking-wider">
+                                <span>⚜️ Sello de Aprobación de Owlaris</span>
+                                <span class="text-stone-500">|</span>
+                                <span>Gabinete de Zoología ⚜️</span>
+                            </div>
+                        </div>
+
+                        <button onclick="resetLab()" class="text-xs sm:text-sm wood-btn px-6 py-3.5 rounded-xl font-bold uppercase tracking-wider shadow-xl transition-all">
+                            <i class="fa-solid fa-rotate-left mr-1.5"></i> Volver a Jugar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- NOTIFICACIONES CUSTOM DEL MUSEO (SIN ALERTS NATIVOS) -->
+    <div id="alert-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-stone-950/90 hidden opacity-0 transition-opacity duration-300 backdrop-blur-md">
+        <div class="glass-cabinet p-8 rounded-3xl max-w-sm w-full text-center space-y-4 border-2 border-amber-500/35 brass-border">
+            <span id="alert-emoji" class="text-6xl block select-none"></span>
+            <h5 id="alert-title" class="font-extrabold text-amber-100 text-xl sm:text-2xl museum-title"></h5>
+            <p id="alert-msg" class="text-stone-300 text-sm sm:text-base leading-relaxed museum-serif"></p>
+            <button onclick="closeAlert()" class="w-full py-3.5 brass-btn text-xs sm:text-sm uppercase tracking-wider rounded-xl transition-all duration-300">
+                Aceptar Registro
+            </button>
+        </div>
+    </div>
+
+    <!-- PROGRAMACIÓN INTERACTIVA DEL MUSEO -->
+    <script>
+        // ESTADO GLOBAL
+        const state = {
+            time: 600,
+            activeTab: 'exhibitions',
+            solved: 0,
+            selectedClue: null,
+            audioEnabled: true,      // Control de SFX
+            ambientEnabled: false,   // Control de música de ambiente
+            clues: [
+                { id: 1, text: "Criatura con 8 patas largas que se doblan al caminar", target: "spider", placed: false },
+                { id: 2, text: "Cuerpo dividido en 3 partes: cabeza, tórax y abdomen", target: "insect", placed: false },
+                { id: 3, text: "Muestra que tiene dos antenas en su cabecita", target: "insect", placed: false },
+                { id: 4, text: "Cuerpo dividido en solo 2 partes (cefalotórax y abdomen)", target: "spider", placed: false },
+                { id: 5, text: "Criatura con exactamente 6 patas articuladas", target: "insect", placed: false },
+                { id: 6, text: "Estructura exterior dura que no tiene antenas", target: "spider", placed: false }
+            ]
+        };
+
+        const anatomy = {
+            mamiferos: { 
+                name: "Mamíferos", 
+                emoji: "🦁", 
+                sub: "Animales de sangre caliente", 
+                bone: "Huesos sólidos por dentro y una columna vertebral en la espalda.", 
+                cover: "Su piel está cubierta de pelo para protegerlos del frío.", 
+                move: "Tienen patas para correr, saltar, nadar o trepar.",
+                complexity: 92,
+                origin: "Hace 210 millones de años"
+            },
+            aves: { 
+                name: "Aves", 
+                emoji: "🦅", 
+                sub: "Criaturas del aire", 
+                bone: "Huesos huecos y ligeros que les permiten elevarse sin pesar tanto.", 
+                cover: "Su cuerpo tiene plumas aerodinámicas que ayudan a planear.", 
+                move: "Dos alas fuertes delanteras y garras traseras para posarse.",
+                complexity: 85,
+                origin: "Hace 150 millones de años"
+            },
+            peces: { 
+                name: "Peces", 
+                emoji: "🐟", 
+                sub: "Exploradores acuáticos", 
+                bone: "Esqueleto muy flexible hecho de espinas finas para ondular el cuerpo.", 
+                cover: "Su piel tiene escamas brillantes y resbaladizas.", 
+                move: "Diferentes aletas que les ayudan a timonear y nadar con fuerza.",
+                complexity: 70,
+                origin: "Hace 500 millones de años"
+            },
+            insectos: { 
+                name: "Insectos", 
+                emoji: "🐜", 
+                sub: "Criaturas articuladas", 
+                bone: "No tienen huesos internos. Tienen una armadura exterior de quitina.", 
+                cover: "Esa armadura exterior que les protege el cuerpo como un caparazón.", 
+                move: "Tienen exactamente 6 patas para andar y a veces alas para volar.",
+                complexity: 78,
+                origin: "Hace 400 millones de años"
+            },
+            aranas: { 
+                name: "Arañas", 
+                emoji: "🕷️", 
+                sub: "Tejedoras sigilosas", 
+                bone: "Una fuerte armadura externa muy ligera y flexible.", 
+                cover: "Cuerpo cubierto de pelitos finos que les ayudan a sentir el aire.", 
+                move: "Tienen exactamente 8 patas rápidas que se doblan al caminar.",
+                complexity: 75,
+                origin: "Hace 380 millones de años"
+            }
+        };
+
+        // MOTOR DE AUDIO SINTETIZADO (Web Audio API)
+        let audioCtx = null;
+        let ambientOscA = null;
+        let ambientOscB = null;
+        let ambientGain = null;
+
+        function initAudioCtx() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        // 1. Sonido de clac mecánico (Botones / Vitrinas)
+        function playCabinetClick() {
+            if (!state.audioEnabled) return;
+            initAudioCtx();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+            
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.type = 'sine';
+            filter.type = 'bandpass';
+            filter.frequency.setValueAtTime(320, audioCtx.currentTime);
+            filter.Q.setValueAtTime(12, audioCtx.currentTime);
+            
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.08);
+            
+            gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.09);
+        }
+
+        // 2. Ulular de Owlaris ("Uu-huu")
+        function playOwlHoot() {
+            if (!state.audioEnabled) return;
+            initAudioCtx();
+            
+            // Primer hoot: "Uu"
+            hootSound(680, 0.22, 0.05);
+            
+            // Segundo hoot: "huu"
+            setTimeout(() => {
+                hootSound(650, 0.35, 0.06);
+            }, 300);
+        }
+
+        function hootSound(baseFreq, duration, delay) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(baseFreq - 30, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(baseFreq + 15, audioCtx.currentTime + (duration * 0.4));
+            osc.frequency.linearRampToValueAtTime(baseFreq - 40, audioCtx.currentTime + duration);
+            
+            gain.gain.setValueAtTime(0, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.18, audioCtx.currentTime + 0.06);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        // 3. Sonido triunfal de acierto (Arpegio Mayor Clásico de Cúpula)
+        function playSuccessChord() {
+            if (!state.audioEnabled) return;
+            initAudioCtx();
+            const t = audioCtx.currentTime;
+            
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // Do, Mi, Sol, Do
+            notes.forEach((freq, index) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, t + (index * 0.06));
+                
+                gain.gain.setValueAtTime(0, t + (index * 0.06));
+                gain.gain.linearRampToValueAtTime(0.12, t + (index * 0.06) + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + (index * 0.06) + 0.55);
+                
+                osc.start(t + (index * 0.06));
+                osc.stop(t + (index * 0.06) + 0.6);
+            });
+        }
+
+        // 4. Sonido sordo de error
+        function playErrorThud() {
+            if (!state.audioEnabled) return;
+            initAudioCtx();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(160, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(80, audioCtx.currentTime + 0.2);
+            
+            gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.26);
+        }
+
+        // 5. Música de ambiente del gabinete
+        function toggleAmbient() {
+            initAudioCtx();
+            state.ambientEnabled = !state.ambientEnabled;
+            
+            const btn = document.getElementById('ambient-btn');
+            const icon = document.getElementById('ambient-icon');
+            const status = document.getElementById('ambient-status');
+            
+            if (state.ambientEnabled) {
+                icon.className = "fa-solid fa-music text-amber-500 animate-spin";
+                status.innerText = "Música de Ambiente: Activa";
+                
+                ambientOscA = audioCtx.createOscillator();
+                ambientOscB = audioCtx.createOscillator();
+                ambientGain = audioCtx.createGain();
+                
+                ambientOscA.type = 'sine';
+                ambientOscA.frequency.value = 65; // Profundo 65Hz
+                
+                ambientOscB.type = 'sine';
+                ambientOscB.frequency.value = 65.4;
+                
+                ambientGain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                
+                ambientOscA.connect(ambientGain);
+                ambientOscB.connect(ambientGain);
+                ambientGain.connect(audioCtx.destination);
+                
+                ambientOscA.start();
+                ambientOscB.start();
+                
+                ambientScheduler();
+            } else {
+                icon.className = "fa-solid fa-music text-stone-500";
+                status.innerText = "Música de Ambiente: Desactivada";
+                
+                if (ambientOscA) { ambientOscA.stop(); ambientOscA = null; }
+                if (ambientOscB) { ambientOscB.stop(); ambientOscB = null; }
+                if (ambientGain) { ambientGain.disconnect(); ambientGain = null; }
+            }
+            playCabinetClick();
+        }
+
+        function ambientScheduler() {
+            if (!state.ambientEnabled) return;
+            
+            const t = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const delay = audioCtx.createDelay();
+            
+            osc.connect(gain);
+            gain.connect(delay);
+            delay.connect(audioCtx.destination);
+            
+            osc.type = 'sine';
+            const notes = [880, 987.77, 1046.50, 1318.51];
+            const randomNote = notes[Math.floor(Math.random() * notes.length)];
+            
+            osc.frequency.setValueAtTime(randomNote, t);
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(0.015, t + 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 2.0);
+            
+            delay.delayTime.setValueAtTime(0.3, t);
+            
+            osc.start(t);
+            osc.stop(t + 2.5);
+            
+            setTimeout(ambientScheduler, 4000 + Math.random() * 5000);
+        }
+
+        function toggleSFX() {
+            state.audioEnabled = !state.audioEnabled;
+            const icon = document.getElementById('sfx-icon');
+            const status = document.getElementById('sfx-status');
+            
+            if (state.audioEnabled) {
+                icon.className = "fa-solid fa-volume-high text-emerald-400";
+                status.innerText = "Sonidos de Vitrina: Activos";
+                playCabinetClick();
+            } else {
+                icon.className = "fa-solid fa-volume-xmark text-red-500";
+                status.innerText = "Sonidos de Vitrina: Silenciados";
+            }
+        }
+
+        // INICIAR LA EXPERIENCIA DEL MUSEO
+        function startMuseum() {
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('museum-area').classList.remove('hidden');
+            
+            initAudioCtx();
+            playSuccessChord();
+            setTimeout(playOwlHoot, 1200);
+
+            setInterval(() => {
+                if(state.time > 0) {
+                    state.time--;
+                    const m = Math.floor(state.time / 60);
+                    const s = state.time % 60;
+                    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+                }
+            }, 1000);
+
+            updateComparison();
+            renderLab();
+        }
+
+        function switchTab(id) {
+            playCabinetClick();
+            
+            ['exhibitions', 'comparer', 'lab', 'badge-room'].forEach(t => {
+                document.getElementById('content-' + t).classList.add('hidden');
+                document.getElementById('tab-' + t).className = "py-4 px-5 rounded-xl text-sm sm:text-base font-extrabold transition-all duration-300 text-stone-400 hover:bg-stone-900/60 flex items-center justify-center gap-2.5";
+            });
+            
+            document.getElementById('content-' + id).classList.remove('hidden');
+            document.getElementById('tab-' + id).className = "py-4 px-5 rounded-xl text-sm sm:text-base font-extrabold transition-all duration-300 bg-amber-500 text-stone-950 shadow-md flex items-center justify-center gap-2.5";
+            
+            if (id === 'badge-room') {
+                updateBadge();
+            }
+        }
+
+        // CLIC EN CADA VITRINA INDIVIDUAL (GALERÍAS)
+        function clickExhibit(type) {
+            playCabinetClick();
+            
+            ['mamiferos', 'aves', 'peces'].forEach(t => {
+                const cab = document.getElementById('cabinet-' + t);
+                const badge = document.getElementById('badge-' + t);
+                if (cab) {
+                    cab.className = "glass-cabinet spotlight-hover p-6 rounded-3xl hover:border-amber-500/50 transition-all duration-300 flex flex-col justify-between group cursor-pointer";
+                    cab.classList.remove('projector-glow');
+                }
+                if (badge) badge.classList.add('hidden');
+            });
+
+            const activeCab = document.getElementById('cabinet-' + type);
+            const activeBadge = document.getElementById('badge-' + type);
+            
+            if (activeCab) {
+                activeCab.classList.add('projector-glow');
+                activeCab.className += " border-amber-400 shadow-[0_0_25px_rgba(212,175,55,0.25)]";
+            }
+            if (activeBadge) {
+                activeBadge.classList.remove('hidden');
+            }
+
+            if (type === 'mamiferos') {
+                hootSound(220, 0.4, 0);
+                showAlert("Vitrina de Mamíferos", "¡Luz encendida! Observa cómo su esqueleto interno tiene una columna fuerte para sostener todo su cuerpo.", "🦁");
+            } else if (type === 'aves') {
+                hootSound(880, 0.35, 0);
+                showAlert("Vitrina de Aves", "¡Luz encendida! Mira cómo los huesos son huecos por dentro para que el ave no pese casi nada al volar.", "🦅");
+            } else if (type === 'peces') {
+                hootSound(440, 0.5, 0);
+                showAlert("Vitrina de Peces", "¡Luz encendida! Observa el esqueleto flexible diseñado para ondularse y nadar a gran velocidad bajo el agua.", "🐟");
+            }
+        }
+
+        // ACTUALIZACIÓN DE LA CONSOLA DE COMPARACIÓN
+        function updateComparison() {
+            const valA = document.getElementById('select-a').value;
+            const valB = document.getElementById('select-b').value;
+            const a = anatomy[valA];
+            const b = anatomy[valB];
+            
+            const render = (data, id, isSecondaryAccent) => {
+                const accentText = isSecondaryAccent ? 'text-amber-500' : 'text-amber-400';
+                const accentColor = isSecondaryAccent ? '#f59e0b' : '#d97706';
+                
+                document.getElementById(id).innerHTML = `
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="text-7xl select-none filter drop-shadow-md">${data.emoji}</span>
+                        <div>
+                            <h4 class="text-2xl font-bold text-white museum-title">${data.name}</h4>
+                            <span class="text-xs ${accentText} uppercase font-extrabold tracking-wider">${data.sub}</span>
+                        </div>
+                    </div>
+                    <div class="space-y-4 text-xs">
+                        <div class="bg-stone-900/80 p-4 rounded-xl border border-stone-850">
+                            <p class="text-stone-500 font-bold uppercase text-[10px] tracking-widest mb-1">Soporte del Cuerpo</p>
+                            <p class="text-stone-200 leading-relaxed text-sm">${data.bone}</p>
+                        </div>
+                        <div class="bg-stone-900/80 p-4 rounded-xl border border-stone-850">
+                            <p class="text-stone-500 font-bold uppercase text-[10px] tracking-widest mb-1">Protección Exterior</p>
+                            <p class="text-stone-200 leading-relaxed text-sm">${data.cover}</p>
+                        </div>
+                        <div class="bg-stone-900/80 p-4 rounded-xl border border-stone-850">
+                            <p class="text-stone-500 font-bold uppercase text-[10px] tracking-widest mb-1">Cómo se Desplaza</p>
+                            <p class="text-stone-200 leading-relaxed text-sm">${data.move}</p>
+                        </div>
+                        
+                        <!-- Gráfico comparativo -->
+                        <div class="pt-2">
+                            <div class="flex justify-between text-xs text-stone-400 mb-1">
+                                <span>Complejidad del Cuerpo</span>
+                                <span class="font-bold">${data.complexity}%</span>
+                            </div>
+                            <div class="w-full bg-stone-950 rounded-full h-2.5 overflow-hidden p-0.5 border border-stone-900">
+                                <div class="h-full rounded-full" style="width: ${data.complexity}%; background-color: ${accentColor};"></div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between text-xs text-stone-500">
+                            <span>Origen en el planeta</span>
+                            <span class="font-bold">${data.origin}</span>
+                        </div>
+                    </div>
+                `;
+            };
+            
+            render(a, 'card-a', false); 
+            render(b, 'card-b', true);
+            
+            // Conclusiones filogenéticas de Owlaris
+            const isInvA = a.sub.includes('articuladas') || a.name === 'Insectos' || a.name === 'Arañas';
+            const isInvB = b.sub.includes('articuladas') || b.name === 'Insectos' || b.name === 'Arañas';
+            const conclusion = isInvA === isInvB ? 
+                `¡Gran observación! Tanto los ${a.name} como los ${b.name} usan un sistema de soporte similar en su tipo, adaptando muy bien sus extremidades y coberturas al lugar donde viven.` : 
+                `¡Un enorme salto de la naturaleza! Los ${a.name} tienen huesos internos que crecen con ellos, mientras que los ${b.name} tienen una armadura exterior que deben mudar para poder crecer de tamaño.`;
+            
+            document.getElementById('conclusion-text').innerText = conclusion;
+        }
+
+        // RENDERIZADO DE LA BANDEJA DEL LABORATORIO TAXONÓMICO
+        function renderLab() {
+            const list = document.getElementById('clues-list');
+            list.innerHTML = '';
+            let unplacedCount = 0;
+            
+            state.clues.forEach(clue => {
+                if(!clue.placed) {
+                    unplacedCount++;
+                    const btn = document.createElement('button');
+                    btn.className = `w-full p-4 rounded-xl text-left text-sm font-bold transition-all duration-300 border flex items-center justify-between gap-3 ${state.selectedClue === clue.id ? 'bg-amber-500/15 border-amber-500 text-amber-100 shadow-md ring-2 ring-amber-500/25' : 'bg-stone-900/90 border-stone-850 text-stone-200 hover:text-white hover:border-stone-500'}`;
+                    btn.innerHTML = `
+                        <span>🔎 ${clue.text}</span>
+                        <i class="fa-solid ${state.selectedClue === clue.id ? 'fa-circle-dot text-amber-500' : 'fa-circle text-stone-700'} text-base flex-shrink-0"></i>
+                    `;
+                    btn.onclick = () => { 
+                        playCabinetClick();
+                        state.selectedClue = clue.id; 
+                        renderLab(); 
+                    };
+                    list.appendChild(btn);
+                }
+            });
+
+            if (unplacedCount === 0) {
+                list.innerHTML = `
+                    <div class="text-center py-16 text-emerald-400 font-bold text-sm flex flex-col items-center gap-3">
+                        <i class="fa-solid fa-circle-check text-5xl animate-bounce"></i>
+                        <span>¡Muestras Organizas!<br>Todos los especímenes están en su vitrina.</span>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('target-insect').innerHTML = state.clues.filter(c => c.placed === 'insect').map(c => `<div class="bg-emerald-500/10 p-3 rounded-xl text-xs sm:text-sm text-emerald-400 font-bold border border-emerald-500/20 shadow-inner">✅ ${c.text}</div>`).join('');
+            document.getElementById('target-spider').innerHTML = state.clues.filter(c => c.placed === 'spider').map(c => `<div class="bg-amber-500/10 p-3 rounded-xl text-xs sm:text-sm text-amber-400 font-bold border border-amber-500/20 shadow-inner">✅ ${c.text}</div>`).join('');
+            
+            if(unplacedCount === 0) {
+                document.getElementById('success-alert').classList.remove('hidden');
+                playSuccessChord();
+            }
+            updateBadge();
+        }
+
+        // CLASIFICAR UNA MUESTRA MORFOLÓGICA
+        function moveTo(type) {
+            if(!state.selectedClue) { 
+                playErrorThud();
+                showAlert("Falta Selección", "Por favor, selecciona primero cualquiera de las muestras de la bandeja de la izquierda antes de asignarlas a una vitrina.", "🔍"); 
+                return; 
+            }
+            
+            const clue = state.clues.find(c => c.id === state.selectedClue);
+            if(clue.target === type) {
+                clue.placed = type; 
+                state.selectedClue = null; 
+                state.solved++;
+                playCabinetClick();
+                setTimeout(playOwlHoot, 300); // Owlaris aprueba con un ulular
+                showAlert("¡Clasificación Correcta!", "¡Muy bien pensado! Tu deducción coincide perfectamente con el registro científico.", "✨");
+                renderLab();
+            } else { 
+                playErrorThud();
+                showAlert("Discrepancia", "¡Espera un segundo! Piensa bien: ¿cuántas patas tiene o tiene antenas? Revisa la pista y vuelve a intentarlo.", "❌"); 
+            }
+        }
+
+        // ACTUALIZACIÓN DE RECONOCIMIENTOS (CONGRATS Y MEDALLA)
+        function updateBadge() {
+            const progressPercentage = (state.solved / 6) * 100;
+            document.getElementById('progress-bar').style.width = progressPercentage + '%';
+            document.getElementById('progress-txt').innerText = `PROGRESO: ${state.solved} de 6 pistas clasificadas`;
+            
+            if(state.solved === 6) {
+                document.getElementById('badge-lock').classList.add('hidden');
+                document.getElementById('badge-unlocked').classList.remove('hidden');
+                document.getElementById('badge-name').innerText = "Maestro Conservador";
+                document.getElementById('badge-msg').innerHTML = "¡Espectacular! Has completado todo el laboratorio. Demostraste ser un gran observador del mundo animal.";
+                document.getElementById('congrats-panel').classList.remove('hidden');
+            }
+        }
+
+        function resetLab() {
+            playCabinetClick();
+            state.solved = 0; 
+            state.selectedClue = null; 
+            state.clues.forEach(c => c.placed = false);
+            document.getElementById('success-alert').classList.add('hidden');
+            document.getElementById('badge-lock').classList.remove('hidden');
+            document.getElementById('badge-unlocked').classList.add('hidden');
+            document.getElementById('congrats-panel').classList.add('hidden');
+            document.getElementById('badge-name').innerText = "Investigador Novel";
+            document.getElementById('badge-msg').innerHTML = "Ordena todas las muestras de la mesa de trabajo para ganar tu medalla de la academia de ciencias.";
+            renderLab();
+        }
+
+        // ALERTAS PERSONALIZADAS
+        function showAlert(title, msg, emoji) {
+            document.getElementById('alert-emoji').innerText = emoji;
+            document.getElementById('alert-title').innerText = title;
+            document.getElementById('alert-msg').innerText = msg;
+            
+            const modal = document.getElementById('alert-modal');
+            modal.classList.remove('hidden'); 
+            setTimeout(() => modal.classList.add('opacity-100'), 15);
+        }
+
+        function closeAlert() {
+            playCabinetClick();
+            const modal = document.getElementById('alert-modal');
+            modal.classList.remove('opacity-100'); 
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        // EFECTOS VISUALES ADICIONALES (Focos de luz y partículas de polvo)
+        window.addEventListener('load', () => {
+            // Generar partículas de polvo flotando en el aire del museo
+            const dustContainer = document.getElementById('dust');
+            const particleCount = 22;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'dust-particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.width = Math.random() * 5 + 1 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = Math.random() * 15 + 15 + 's';
+                dustContainer.appendChild(particle);
+            }
+
+            // Registrar coordenadas del ratón para el efecto reflector/foco de luz
+            document.addEventListener('mousemove', (e) => {
+                const targets = document.querySelectorAll('.spotlight-hover');
+                targets.forEach(target => {
+                    const rect = target.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    target.style.setProperty('--mouse-x', `${x}px`);
+                    target.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
